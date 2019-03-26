@@ -1,6 +1,13 @@
 * {
   box-sizing: border-box;
 }
+ul#typeOptions {
+  list-style: none;
+}
+ul#typeOptions li{
+  display:inline;
+  margin-right:3px;
+}
 /* Search Bar */
 #searchInput{
   padding: 10px;

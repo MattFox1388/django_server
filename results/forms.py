@@ -7,6 +7,7 @@ FILE_CHOICES = (
     ('images', 'IMAGES')
 )
 
+
 class SearchForm(forms.Form):
     search_phrase = forms.CharField(max_length=128)
     files = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=FILE_CHOICES)
