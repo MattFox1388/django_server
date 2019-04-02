@@ -27,5 +27,6 @@ class HomeView(View):
                 print(item)
             # TODO: add call to database and then update table
             documents = db.get(search_phrase)
+            print(documents)
         else:
             raise Http404
