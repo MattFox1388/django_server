@@ -6,7 +6,7 @@ from django.utils.html import escape
 from sabackend import SABackend
 # Create your views here.
 
-db = SABackend.__init__(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',
+db = SABackend(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',
                         user='doc_org',password='d3NXWWfyHT',port='5432')
 
 
