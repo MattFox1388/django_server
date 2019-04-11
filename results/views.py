@@ -7,6 +7,7 @@ import sys
 sys.path.append("..")
 from sabackend import SABackend
 import logging
+logger = logging.getLogger(__name__)
 # Create your views here.
 
 db = SABackend(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',
@@ -27,11 +28,11 @@ class HomeView(View):
             print("search phrase: " + search_phrase)
             print("file options: ")
             for item in escape(form.cleaned_data['files']):
-                print(item)
+                logger.debug(item)
             # TODO: add call to database and then update table
             documents = db.get(search_phrase)
             for doc in documents:
-                logging.debug(doc.get_file_path())
-                logging.debug(doc.get_file_size())
+                logger.debug(doc.get_file_path())
+                logger.debug(doc.get_file_size())
         else:
             raise Http404
