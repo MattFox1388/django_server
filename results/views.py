@@ -3,7 +3,9 @@ from django.views import View
 from .forms import SearchForm
 from django.http import Http404
 from django.utils.html import escape
-from ..sabackend import SABackend
+import sys
+sys.path.append("..")
+from sabackend import SABackend
 import logging
 # Create your views here.
 
