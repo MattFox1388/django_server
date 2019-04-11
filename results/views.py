@@ -3,7 +3,8 @@ from django.views import View
 from .forms import SearchForm
 from django.http import Http404
 from django.utils.html import escape
-from sabackend import SABackend
+from ..sabackend import SABackend
+import logging
 # Create your views here.
 
 db = SABackend(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',
@@ -28,7 +29,7 @@ class HomeView(View):
             # TODO: add call to database and then update table
             documents = db.get(search_phrase)
             for doc in documents:
-                print(doc.get_file_path())
-                print(doc.get_file_size())
+                logging.debug(doc.get_file_path())
+                logging.debug(doc.get_file_size())
         else:
             raise Http404
