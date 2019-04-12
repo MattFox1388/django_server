@@ -4,7 +4,7 @@ from sabackend import SABackend
 from django.shortcuts import render
 from django.views import View
 from .forms import SearchForm
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.utils.html import escape
 # Create your views here.
 
@@ -33,3 +33,13 @@ class HomeView(View):
         else:
             print(form.errors)
             raise Http404
+
+
+# this function will open file selected on webpage
+def open_file(request):
+    filecontent = ''
+    if request.method == 'POST' and request.is_ajax():
+        file_path = request.POST['file_path_clicked']
+        with open(file_path, 'r') as filehandle:
+            filecontent = filehandle.read()
+    return HttpResponse(filecontent)
