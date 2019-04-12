@@ -45,7 +45,7 @@
             <tbody>
             {% for doc in resultFiles%}
                 <tr>
-                    <td><a href="{{ doc.get_file_path }}">{{ doc.get_file_path }}</a></td>
+                    <td><a href="file://{{ doc.get_file_path }}">{{ doc.get_file_path }}</a></td>
                     <td>{{ doc.get_file_size|div:"1000" }}</td>
                     <td>{{ doc.get_create_date }}</td>
                     <td>{{ doc.get_edit_date }}</td>
