@@ -42,4 +42,6 @@ def open_file(request):
         file_path = request.POST['file_path_clicked']
         with open(file_path, 'r') as filehandle:
             filecontent = filehandle.read()
+        print('file content:')
+        print(filecontent)
     return HttpResponse(filecontent)
