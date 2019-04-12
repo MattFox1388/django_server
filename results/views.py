@@ -6,8 +6,6 @@ from django.utils.html import escape
 import sys
 sys.path.append("..")
 from sabackend import SABackend
-import logging
-logger = logging.getLogger(__name__)
 # Create your views here.
 
 db = SABackend(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',
@@ -22,17 +20,18 @@ class HomeView(View):
         return render(request, self.template_name, {'form': self.search_form})
 
     def post(self, request):
+        print('here')
         form = SearchForm(request.POST)
         if form.is_valid():
             search_phrase = escape(form.cleaned_data['search_phrase'])
             print("search phrase: " + search_phrase)
             print("file options: ")
-            for item in escape(form.cleaned_data['files']):
-                logger.debug(item)
+            print(escape(form.cleaned_data['files']))
             # TODO: add call to database and then update table
             documents = db.get(search_phrase)
             for doc in documents:
-                logger.debug(doc.get_file_path())
-                logger.debug(doc.get_file_size())
+                print(doc.get_file_path())
+                print(doc.get_file_size())
         else:
+            print(form.errors)
             raise Http404

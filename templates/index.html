@@ -13,7 +13,7 @@
     {% load widget_tweaks %}
     <div class="container">
           <!--Search Bar-->
-          <form class="search form-horizontal" action="" method="post">
+          <form class="search form-horizontal" action="" method="post" enctype="multipart/form-data">
               {% csrf_token %}
             <div class="form-group col-xs-6">
                 {{ form.search_phrase|attr:"placeholder:Search.."|attr:"name:search"|attr:"id:searchInput" }}

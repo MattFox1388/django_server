@@ -1,4 +1,5 @@
 from django import forms
+from multiselectfield import MultiSelectFormField
 
 FILE_CHOICES = (
     ('text', 'TEXT'),
@@ -10,4 +11,4 @@ FILE_CHOICES = (
 
 class SearchForm(forms.Form):
     search_phrase = forms.CharField(max_length=128)
-    files = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=FILE_CHOICES)
+    files = MultiSelectFormField(widget=forms.CheckboxSelectMultiple, choices=FILE_CHOICES, required=False)
