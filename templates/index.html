@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Document Organizer</title>
     {% load static %}
+    {% load mathfilters %}
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/css/bootstrap.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
@@ -36,20 +37,20 @@
             <thead>
               <tr>
                 <th>Document</th>
-                <th>Path</th>
+                <th>Size (Kilo Bytes)</th>
                 <th>Date Created</th>
                 <th>Date Modified</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Example
-              <tr>
-                <td>fileOne.doc</td>
-                <td>C:\\Downloads\fileOne.doc</td>
-                <td>Sep. 6, 2019</td>
-                <td>Jan. 30, 2020</td>
-              </tr>
-              -->
+            {% for doc in resultFiles%}
+                <tr>
+                    <td><a href="{{ doc.get_file_path }}">{{ doc.get_file_path }}</a></td>
+                    <td>{{ doc.get_file_size|div:"1000" }}</td>
+                    <td>{{ doc.get_create_date }}</td>
+                    <td>{{ doc.get_edit_date }}</td>
+                </tr>
+            {% endfor %}
             </tbody>
           </table>
     </div>

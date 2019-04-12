@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'results.apps.ResultsConfig',
     'widget_tweaks',
-    'multiselectfield'
+    'multiselectfield',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [

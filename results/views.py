@@ -17,7 +17,7 @@ class HomeView(View):
     search_form = SearchForm
 
     def get(self, request):
-        return render(request, self.template_name, {'form': self.search_form})
+        return render(request, self.template_name, {'form': self.search_form, 'resultFiles': []})
 
     def post(self, request):
         print('here')
@@ -29,9 +29,7 @@ class HomeView(View):
             print(escape(form.cleaned_data['files']))
             # TODO: add call to database and then update table
             documents = db.get(search_phrase)
-            for doc in documents:
-                print(doc.get_file_path())
-                print(doc.get_file_size())
+            return render(request, self.template_name, {'form': self.search_form, 'resultFiles': documents})
         else:
             print(form.errors)
             raise Http404
