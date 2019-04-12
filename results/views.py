@@ -1,11 +1,11 @@
+import sys
+sys.path.append("..")
+from sabackend import SABackend
 from django.shortcuts import render
 from django.views import View
 from .forms import SearchForm
 from django.http import Http404
 from django.utils.html import escape
-import sys
-sys.path.append("..")
-from sabackend import SABackend
 # Create your views here.
 
 db = SABackend(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',

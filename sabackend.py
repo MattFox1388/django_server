@@ -1,10 +1,10 @@
 import datetime
 from abc import ABCMeta
-import sys
 import traceback
 
 from frozendict import frozendict
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+
 from document import Document
 from storagebackend import StorageBackend
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, TIMESTAMP
@@ -27,7 +27,7 @@ class SAKeywordInstance(base):
     __tablename__ = 'keyword_instance'
 
     keyword_id = Column(Integer, ForeignKey("keyword.keyword_id"), primary_key=True, nullable=False)
-    keyword = relationship(SAKeyword)
+    keyword = relationship(SAKeyword, lazy='joined')
     file_id = Column(Integer, ForeignKey("document.file_id"), primary_key=True)
     count = Column(Integer)
 
@@ -59,7 +59,7 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
     date_edit = Column(TIMESTAMP, nullable=False)
     file_size = Column(Integer, nullable=False)
     num_words = Column(Integer, nullable=False)
-    keywords = relationship("SAKeywordInstance", backref='document', cascade="all, delete-orphan")
+    keywords = relationship("SAKeywordInstance", backref='document', cascade="all, delete-orphan", lazy='selectin')
 
     keyword_map = {}
     safe_keyword_map = None
@@ -74,7 +74,15 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
         return self.hash
 
     def get_keywords(self):
+        if not self.safe_keyword_map:
+            self.__init__()
         return dict(self.safe_keyword_map)
+
+    def get_occurrences(self, keyword: str) -> int:
+        for k in self.keywords:
+            if k.keyword.keyword == keyword:
+                return k.count
+        return 0
 
     def get_parse_date(self) -> datetime:
         return self.date_parse
@@ -110,9 +118,6 @@ class SABackend(StorageBackend):
     db = None
     session = None
 
-    def _query(self, *entities, **kwargs):
-        return self.session.query(*entities, **kwargs)
-
     def __new__(cls, host: str, dbname: str, user: str, password: str, port: str):
         return super(SABackend, cls).__new__(cls)
 
@@ -132,7 +137,7 @@ class SABackend(StorageBackend):
         return
 
     def get_total_document_count(self) -> int:
-        return self._query(SADocument).count()
+        return self.session().query(SADocument).count()
 
     def store(self, docs) -> bool:
         """
@@ -191,7 +196,7 @@ class SABackend(StorageBackend):
     def get(self, query_text: str):
         """
         Returns any documents that contain the given keyword.
-        :param keyword: The keyword in question
+        :param query_text: The text to be queried
         :return: Collection of documents
         """
 
@@ -199,12 +204,17 @@ class SABackend(StorageBackend):
         documents = self._get_docs(keyword)
         idf = self._get_inverse_document_frequncy(documents)
 
-        documents.sort(key=lambda d: StorageBackend._get_relevance(d, keyword, idf))
-        return [d.get_file_path for d in documents]
+        documents.sort(key=lambda d: StorageBackend._get_relevance(d, keyword, idf) * -1)
+        return documents
 
     def _get_docs(self, keyword: str):
-        return self._query(SADocument) \
-            .filter(SADocument.instance.keyword.in_(keyword)).all()
+        result = self.db.engine.execute("SELECT file_id \
+        FROM keyword_instance \
+        LEFT JOIN keyword on keyword.keyword_id = keyword_instance.keyword_id \
+        WHERE keyword.keyword LIKE '" + keyword + "';")
+        ids = [row for row in result]
+        ids = [row[0] for row in ids]
+        return self.session().query(SADocument).filter(SADocument.file_id.in_(ids)).all()
 
     def get_by_path(self, path: str) -> Document:
         """
