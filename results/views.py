@@ -38,10 +38,8 @@ class HomeView(View):
 # this function will open file selected on webpage
 def open_file(request):
     filecontent = ''
-    if request.method == 'POST' and request.is_ajax():
+    if request.method == 'GET':
         file_path = request.GET.get('q')
         with open(file_path, 'r') as filehandle:
             filecontent = filehandle.read()
-    return render(request, 'view.html', {
-        'fileView': filecontent
-    })
+    return HttpResponse(filecontent)
