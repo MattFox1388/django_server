@@ -19,7 +19,7 @@ $(function(){
     $('.file_link').click(function(){
         let filePath = $(this).text();
         $.ajax({
-           type:'POST',
+           type:'GET',
            url:'/open_file/',
             data: {
                'file_path_clicked': filePath
