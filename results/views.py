@@ -39,7 +39,7 @@ class HomeView(View):
 def open_file(request):
     filecontent = ''
     if request.method == 'POST' and request.is_ajax():
-        file_path = request.POST['file_path_clicked']
+        file_path = request.GET.get('q')
         with open(file_path, 'r') as filehandle:
             filecontent = filehandle.read()
     return render(request, 'view.html', {

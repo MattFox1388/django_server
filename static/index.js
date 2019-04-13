@@ -20,10 +20,7 @@ $(function(){
         let filePath = $(this).text();
         $.ajax({
            type:'GET',
-           url:'/open_file/',
-            data: {
-               'file_path_clicked': filePath
-            },
+           url:'/open_file/?q=' + filePath,
             success:function(){
                console.log("success!")
             }
