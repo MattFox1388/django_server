@@ -261,4 +261,4 @@ class SABackend(StorageBackend):
         except:
             session.rollback()
             return False
-return True
+        return True
