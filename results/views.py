@@ -40,6 +40,10 @@ def open_file(request):
     filecontent = ''
     if request.method == 'GET':
         file_path = request.GET.get('q')
-        with open(file_path, 'r') as filehandle:
-            filecontent = filehandle.read()
-    return HttpResponse(filecontent)
+        try:
+            with open(file_path, 'rb') as filehandle:
+                filecontent = filehandle.read()
+            return HttpResponse(filecontent, content_type='application/pdf')
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            raise Http404
