@@ -4,7 +4,7 @@ from sabackend import SABackend
 from django.shortcuts import render
 from django.views import View
 from .forms import SearchForm
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, FileResponse
 from django.utils.html import escape
 # Create your views here.
 
@@ -41,9 +41,9 @@ def open_file(request):
     if request.method == 'GET':
         file_path = request.GET.get('q')
         try:
-            with open(file_path, 'rb') as filehandle:
+            with open(file_path, mode='r') as filehandle:
                 filecontent = filehandle.read()
-            return HttpResponse(filecontent, content_type='application/pdf')
+            return FileResponse(filecontent, content_type='application/pdf')
         except:
             print("Unexpected error:", sys.exc_info()[0])
             raise Http404
