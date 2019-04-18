@@ -1,4 +1,5 @@
 $(function(){
+    $('#sortedTb').DataTable();
     //setting up csrf token for ajax requests
     csrftoken = Cookies.get('csrftoken');
 

@@ -10,6 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="{% static 'index.js' %}"></script>
 </head>
 <body>
@@ -35,7 +37,7 @@
     </div>
     <!--Table of Files-->
     <div id="tableDiv">
-        <table class="table">
+        <table class="table" id="sortedTb">
             <thead>
               <tr>
                 <th>Document</th>
