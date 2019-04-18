@@ -2,12 +2,11 @@ import datetime
 from abc import ABCMeta
 import traceback
 
-from frozendict import frozendict
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 
 from document import Document
 from storagebackend import StorageBackend
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, TIMESTAMP
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, TIMESTAMP, Boolean
 from sqlalchemy.orm import sessionmaker, relationship
 
 base = declarative_base()
@@ -30,6 +29,7 @@ class SAKeywordInstance(base):
     keyword = relationship(SAKeyword, lazy='joined')
     file_id = Column(Integer, ForeignKey("document.file_id"), primary_key=True)
     count = Column(Integer)
+    tag = Column(Boolean, nullable=False)
 
     def get_document(self):
         return self.document
@@ -59,15 +59,12 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
     date_edit = Column(TIMESTAMP, nullable=False)
     file_size = Column(Integer, nullable=False)
     num_words = Column(Integer, nullable=False)
-    keywords = relationship("SAKeywordInstance", backref='document', cascade="all, delete-orphan", lazy='selectin')
+    keywords = relationship("SAKeywordInstance", backref='document', cascade="all, delete-orphan", lazy='select')
 
     keyword_map = {}
     safe_keyword_map = None
 
     def __init__(self, *args, **kwargs):
-        for keyword in self.keywords:
-            self.keyword_map.update({keyword.get_word(): keyword.get_count()})
-        self.safe_keyword_map = frozendict(self.keyword_map)
         base.__init__(self, *args, **kwargs)
 
     def get_hash(self) -> str:
@@ -79,6 +76,9 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
         return dict(self.safe_keyword_map)
 
     def get_occurrences(self, keyword: str) -> int:
+        r = self.keyword_map.get(keyword)
+        if not r:
+            return r
         for k in self.keywords:
             if k.keyword.keyword == keyword:
                 return k.count
@@ -109,8 +109,6 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
         return None
 
     def add_keyword(self, word: str, count: int):
-        if self.occurs(word):
-            self._get_db_keyword(word).set_count(count)
         self.keyword_map[word] = count
 
 
@@ -118,14 +116,14 @@ class SABackend(StorageBackend):
     db = None
     session = None
 
-    def __new__(cls, host: str, dbname: str, user: str, password: str, port: str):
+    def __new__(cls, host: str, dbname: str, user: str, password: str, port: str, pool_size: int = 10):
         return super(SABackend, cls).__new__(cls)
 
-    def __init__(self, host: str, dbname: str, user: str, password: str, port: str):
+    def __init__(self, host: str, dbname: str, user: str, password: str, port: str, pool_size: int = 10):
         # Open connection
         database = "postgresql+psycopg2://%s:%s@%s:%s/%s" % (
             user, password, host, port, dbname)
-        self.db = create_engine(database)
+        self.db = create_engine(database, pool_size=pool_size)
         self.session = sessionmaker(self.db)
 
     def close(self):
@@ -156,7 +154,6 @@ class SABackend(StorageBackend):
                         kw = instance
                     else:
                         session.add(kw)
-                session.flush()
 
                 # Check to see if the document exists and if the hash matches
                 doc_instance = session.query(SADocument).filter(SADocument.path == document.get_file_path()).first()
@@ -166,7 +163,6 @@ class SABackend(StorageBackend):
                     # If the document already exists, drop it
                     if doc_instance:
                         session.delete(doc_instance)
-                        session.flush()
                     # Create the document and add it to the database
                     newdoc = SADocument(path=document.get_file_path(),
                                         hash=document.get_hash(),
@@ -176,21 +172,23 @@ class SABackend(StorageBackend):
                                         file_size=document.get_file_size(),
                                         num_words=document.get_num_words())
                     session.add(newdoc)
-                    session.flush()
 
                     # Create a new keyword_instance for each keyword
                     document_kws = document.get_keywords()
                     kws = session.query(SAKeyword).filter(SAKeyword.keyword.in_(document_kws.keys())).all()
                     kws = {kw: document_kws[kw.keyword] for kw in kws}
                     for kw, count in kws.items():
-                        kwi = SAKeywordInstance(keyword_id=kw.keyword_id, file_id=newdoc.file_id, count=count)
+                        kwi = SAKeywordInstance(keyword_id=kw.keyword_id, file_id=newdoc.file_id, count=count
+                                                , tag=False)
                         session.add(kwi)
                     session.flush()
             session.commit()
-        except:
-            print(str(traceback.format_exc()))
+        except Exception as e:
+            traceback.print_exc()
             session.rollback()
-            return False
+            raise e
+        finally:
+            session.close()
         return True
 
     def get(self, query_text: str):
@@ -201,20 +199,19 @@ class SABackend(StorageBackend):
         """
 
         keyword = query_text
-        documents = self._get_docs(keyword)
-        idf = self._get_inverse_document_frequncy(documents)
-
-        documents.sort(key=lambda d: StorageBackend._get_relevance(d, keyword, idf) * -1)
-        return documents
+        return self._get_docs(keyword)
 
     def _get_docs(self, keyword: str):
         result = self.db.engine.execute("SELECT file_id \
         FROM keyword_instance \
         LEFT JOIN keyword on keyword.keyword_id = keyword_instance.keyword_id \
-        WHERE keyword.keyword LIKE '" + keyword + "';")
-        ids = [row for row in result]
-        ids = [row[0] for row in ids]
-        return self.session().query(SADocument).filter(SADocument.file_id.in_(ids)).all()
+        WHERE keyword.keyword LIKE '" + keyword + "' \
+        ORDER BY tf_idf('" + keyword + "', file_id);")
+        ids = [row[0] for row in result]
+        session = self.session()
+        r = session.query(SADocument).filter(SADocument.file_id.in_(ids)).all()
+        session.close()
+        return  r
 
     def get_by_path(self, path: str) -> Document:
         """
@@ -225,10 +222,10 @@ class SABackend(StorageBackend):
         """
         session = self.session()
 
-        documents = session.query(SADocument) \
-            .filter(SADocument.path == path).all()
-        return documents
-        pass
+        doc = session.query(SADocument) \
+            .filter(SADocument.path == path).first()
+        session.close()
+        return doc
 
     # TODO: Implement
     def get_duplicates(self):

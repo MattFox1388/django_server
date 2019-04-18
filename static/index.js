@@ -19,12 +19,12 @@ $(function(){
     //is called when a file link is clicked
     $('.file_link').click(function(){
         let filePath = $(this).text();
+   	var win = window.open();
         $.ajax({
            type:'GET',
            url:'/open_file/?q=' + filePath,
             success:function(data){
-               var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=200,top="+(screen.height-400)+",left="+(screen.width-840));
-               win.document.body.innerHTML = data;
+               $(win.document.body).html(data);
             }
         });
     });
