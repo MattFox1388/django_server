@@ -16,6 +16,7 @@
 </head>
 <body>
     {% load widget_tweaks %}
+    {% load results_extras %}
     <div class="container">
           <!--Search Bar-->
           <form class="search form-horizontal" action="" method="post" enctype="multipart/form-data">
@@ -50,9 +51,9 @@
             {% for doc in resultFiles%}
                 <tr>
                     <td><a class="file_link">{{ doc.get_file_path }}</a></td>
-                    <td>{{ doc.get_file_size|div:"1000" }}</td>
-                    <td>{{ doc.get_edit_date }}</td>
-                    <td>{{ doc.get_create_date }}</td>
+                    <td>{{ doc.get_file_size|div:"1000"|to_int }}</td>
+                    <td><span>{{doc.get_parse_date|dateToISO}}</span>{{ doc.get_parse_date }}</td>
+                    <td><span>{{doc.get_create_date|dateToISO}}</span>{{ doc.get_create_date }}</td>
                 </tr>
             {% endfor %}
             </tbody>

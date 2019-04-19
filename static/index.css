@@ -56,3 +56,7 @@ table{
   margin-right:20px;
 
 }
+
+td span{
+  display: none;
+}
