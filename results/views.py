@@ -6,7 +6,6 @@ from django.views import View
 from .forms import SearchForm
 from django.http import Http404, HttpResponse, FileResponse
 from django.utils.html import escape
-from django.core.paginator import Paginator
 # Create your views here.
 
 db = SABackend(host='ceas-e384d-dev1.cs.uwm.edu',dbname='documentorganizer',
@@ -29,10 +28,7 @@ class HomeView(View):
             print("file options: ")
             print(escape(form.cleaned_data['files']))
             # TODO: add call to database and then update table
-            documents_list = db.get(search_phrase)
-            paginator = Paginator(documents_list, 50)
-            page = request.GET.get('page')
-            documents = paginator.get_page(page)
+            documents = db.get(search_phrase)
             return render(request, self.template_name, {'form': self.search_form, 'resultFiles': documents})
         else:
             print(form.errors)
