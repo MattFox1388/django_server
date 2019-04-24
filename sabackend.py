@@ -149,7 +149,7 @@ class SABackend(StorageBackend):
                 # Check if all keywords are already in database.  If not, add them.
                 for keyword, count in document.get_keywords().items():
                     kw = SAKeyword(keyword=keyword)
-                    instance = session.query(SAKeyword).filter(SAKeyword.keyword == kw.keyword).first()
+                    instance = session.query(SAKeyword).filter(SAKeyword.keyword == keyword).first()
                     if instance:
                         kw = instance
                     else:
@@ -197,21 +197,26 @@ class SABackend(StorageBackend):
         :param query_text: The text to be queried
         :return: Collection of documents
         """
+        return self._get_docs(query_text)
 
-        keyword = query_text
-        return self._get_docs(keyword)
-
-    def _get_docs(self, keyword: str):
-        result = self.db.engine.execute("SELECT file_id \
-        FROM keyword_instance \
-        LEFT JOIN keyword on keyword.keyword_id = keyword_instance.keyword_id \
-        WHERE keyword.keyword LIKE '" + keyword + "' \
-        ORDER BY tf_idf('" + keyword + "', file_id);")
+    def _get_docs(self, query: str):
+        result = self.db.engine.execute("SELECT * FROM query('%s')"%query)
         ids = [row[0] for row in result]
+        docs = self._get_docs_by_id(ids)
+        return self._sort_by_id(ids, docs)
+
+    def _get_docs_by_id(self, ids):
         session = self.session()
-        r = session.query(SADocument).filter(SADocument.file_id.in_(ids)).all()
+        q = session.query(SADocument).filter(SADocument.file_id.in_(ids)).all()
         session.close()
-        return  r
+        return q
+
+    def _sort_by_id(self, ids, docs):
+        doc_map = dict()
+        for doc in docs:
+            doc_map[doc.file_id] = doc
+        r = [doc_map.get(_id) for _id in ids]
+        return r
 
     def get_by_path(self, path: str) -> Document:
         """
