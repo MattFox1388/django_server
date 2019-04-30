@@ -9,13 +9,20 @@
     <h1>{{doc.get_file_path}}</h1>
     </br>
     <div id="stats">
-
+        <b>Filed Size: </b>{{ doc.get_file_size }}
+        <b>Parsed: </b>{{ doc.get_parse_date }}
+        <b>Created: </b>{{ doc.get_create_date }}
+        <b>Modified: </b>{{ doc.get_edit_date }}
     </div>
     <div id="tags">
-
+        {% for tag in doc.get_tags %}
+            <div class="tag">{{ tag }}</div>
+        {% endfor %}
     </div>
     <div id="duplicates">
-
+        {% for doc in duplicates %}
+            <a>{{ doc.get_file_path }}</a>
+        {% endfor %}
     </div>
 </body>
 </html>

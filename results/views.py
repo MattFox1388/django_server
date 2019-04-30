@@ -20,14 +20,12 @@ class HomeView(View):
         return render(request, self.template_name, {'form': self.search_form, 'resultFiles': []})
 
     def post(self, request):
-        print('here')
         form = SearchForm(request.POST)
         if form.is_valid():
             search_phrase = escape(form.cleaned_data['search_phrase'])
             print("search phrase: " + search_phrase)
             print("file options: ")
             print(escape(form.cleaned_data['files']))
-            # TODO: add call to database and then update table
             documents = db.get(search_phrase)
             return render(request, self.template_name, {'form': self.search_form, 'resultFiles': documents})
         else:
