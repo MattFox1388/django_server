@@ -31,9 +31,6 @@
               </button>
             </div>
             <br><br><br>
-            <div class="container">
-                {{ form.files|attr:"id:typeOptions" }}
-            </div>
           </form>
     </div>
     <!--Table of Files-->
@@ -41,6 +38,7 @@
         <table class="table" id="sortedTb">
             <thead>
               <tr>
+                <th style="display:none;"></th>
                 <th>Document</th>
                 <th>Size (Kilo Bytes)</th>
                 <th>Date Created</th>
@@ -50,6 +48,7 @@
             <tbody>
             {% for doc in resultFiles%}
                 <tr>
+                    <td  style="display:none;"></td>
                     <td><a class="file_link">{{ doc.get_file_path }}</a></td>
                     <td>{{ doc.get_file_size|div:"1000"|to_int }}</td>
                     <td><span>{{doc.get_create_date|dateToISO}}</span>{{ doc.get_create_date }}</td>
