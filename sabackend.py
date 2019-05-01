@@ -212,7 +212,7 @@ class SABackend(StorageBackend):
     def get_doc_by_id(self, id):
         session = self.session()
         doc = session.query(SADocument).filter(SADocument.file_id == id).all()
-        doc.tags = self.get_tags(doc)
+        #doc.tags = self.get_tags(doc)
         session.close()
         return doc
 

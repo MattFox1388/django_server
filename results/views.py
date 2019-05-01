@@ -47,7 +47,7 @@ class DetailsView(View):
         duplicate_docs = db.get_duplicates_of(document)
         print('dups: ' + duplicate_docs)
         # get file tags
-        tags = document.get_tags()
+        tags = db.get_tags(document)
         js_tags = json.dumps(tags)
         print('tags: ' + js_tags)
         return render(request, self.template_name, {'path': path, 'num_words': num_words, 'file_size': file_size,
