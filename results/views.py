@@ -37,6 +37,7 @@ class DetailsView(View):
 
     def get(self, request, id):
         document = db.get_doc_by_id(id)
+        print(document)
         # file stats
         path = document.get_file_path()
         num_words = document.get_num_words()
