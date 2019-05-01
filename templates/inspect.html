@@ -4,28 +4,36 @@
     <meta charset="UTF-8">
     <title>Title</title>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'inspect.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/css/bootstrap.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="{% static 'inspect.js' %}"></script>
 </head>
 <body>
-    <h1>File: {{doc.get_file_path}}</h1>
-    </hr>
-    <div id="stats">
-        <h2>File Characteristics</h2>
-        <b>Filed Size: </b>{{ doc.get_file_size }}
-        <b>Parsed: </b>{{ doc.get_parse_date }}
-        <b>Created: </b>{{ doc.get_create_date }}
-        <b>Modified: </b>{{ doc.get_edit_date }}
-    </div>
-    <div id="tags">
-        <h2>Tags</h2>
-        {% for tag in doc.get_tags %}
-            <div class="tag">{{ tag }}</div>
-        {% endfor %}
-    </div>
-    <div id="duplicates">
-        <h2>Duplicates</h2>
-        {% for doc in duplicates %}
-            <a>{{ doc.get_file_path }}</a>
-        {% endfor %}
+    <div class="container">
+        <h1>File: {{doc.get_file_path}}</h1>
+        </hr>
+        <div id="stats">
+            <h2>File Characteristics</h2>
+            <b>Filed Size: </b>{{ doc.get_file_size }}
+            <b>Parsed: </b>{{ doc.get_parse_date }}
+            <b>Created: </b>{{ doc.get_create_date }}
+            <b>Modified: </b>{{ doc.get_edit_date }}
+        </div>
+        <div id="tags">
+            <h2>Tags</h2>
+            {% for tag in doc.get_tags %}
+                <div class="tag">{{ tag }}</div>
+            {% endfor %}
+        </div>
+        <div id="duplicates">
+            <h2>Duplicates</h2>
+            {% for doc in duplicates %}
+                <a>{{ doc.get_file_path }}</a>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>
