@@ -20,11 +20,12 @@ $(function(){
     });
     //is called when a file link is clicked
     $('.file_link').click(function(){
-        let filePath = $(this).text();
+        let file_id = $(this).parent().attr('data-id');
+        console.log('data-id: ' + file_id)
    	var win = window.open();
         $.ajax({
            type:'GET',
-           url:'/open_file/?q=' + filePath,
+           url:'/details/' + file_id,
             success:function(data){
                $(win.document.body).html(data);
             }

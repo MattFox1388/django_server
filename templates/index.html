@@ -49,7 +49,7 @@
             {% for doc in resultFiles%}
                 <tr>
                     <td  style="display:none;"></td>
-                    <td><a class="file_link">{{ doc.get_file_path }}</a></td>
+                    <td data-id="{{ doc.file_id }}"><a class="file_link">{{ doc.get_file_path }}</a></td>
                     <td>{{ doc.get_file_size|div:"1000"|to_int }}</td>
                     <td><span>{{doc.get_create_date|dateToISO}}</span>{{ doc.get_create_date }}</td>
                     <td><span>{{doc.get_edit_date|dateToISO}}</span>{{ doc.get_edit_date }}</td>

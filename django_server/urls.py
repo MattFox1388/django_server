@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from results.views import HomeView, open_file
+from results.views import HomeView, DetailsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view()),
-    path('open_file/', open_file, name='open_file')
+    path('details/<int:id>/', DetailsView, name='details')
 ]

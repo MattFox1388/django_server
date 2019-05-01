@@ -6,20 +6,23 @@
     {% load static %}
 </head>
 <body>
-    <h1>{{doc.get_file_path}}</h1>
-    </br>
+    <h1>File: {{doc.get_file_path}}</h1>
+    </hr>
     <div id="stats">
+        <h2>File Characteristics</h2>
         <b>Filed Size: </b>{{ doc.get_file_size }}
         <b>Parsed: </b>{{ doc.get_parse_date }}
         <b>Created: </b>{{ doc.get_create_date }}
         <b>Modified: </b>{{ doc.get_edit_date }}
     </div>
     <div id="tags">
+        <h2>Tags</h2>
         {% for tag in doc.get_tags %}
             <div class="tag">{{ tag }}</div>
         {% endfor %}
     </div>
     <div id="duplicates">
+        <h2>Duplicates</h2>
         {% for doc in duplicates %}
             <a>{{ doc.get_file_path }}</a>
         {% endfor %}
