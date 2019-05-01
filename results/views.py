@@ -47,7 +47,7 @@ class DetailsView(View):
         # get file dups
         duplicate_docs = db.get_duplicates_of(document)
         for dup_docs in duplicate_docs:
-            print('duplicate for ' + dup_docs)
+            print('duplicate for ' + dup_docs.get_file_path())
         # get file tags
         tags = document.get_tags()
         js_tags = json.dumps(tags)
