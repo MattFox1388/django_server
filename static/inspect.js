@@ -6,4 +6,27 @@ $(function(){
     // these HTTP methods do not require CSRF protection
        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
+
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    $('#submitTag').click(function(){
+        let valStr = $(this).attr('value');
+        console.log('valStr: ' + valStr);
+        tagArr = valStr.split(',');
+        $.ajax({
+           type:'POST',
+           url: window.location.href,
+            data: {'arr': tagArr},
+            success:function(data){
+               $(win.document.body).html(data);
+            }
+        });
+    });
 });

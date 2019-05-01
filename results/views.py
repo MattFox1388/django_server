@@ -56,5 +56,28 @@ class DetailsView(View):
                                                     'date_create': date_create, 'date_edit': date_edit,
                                                     'dups': duplicate_docs, 'tags': tagStr})
 
-    def post(self, request):
-        pass
+    def post(self, request, id):
+        # add tag
+        tagArr = request.POST['arr']
+        for tag in tagArr:
+            db.add_tag(id, tag)
+        # reload page
+        document = db.get_doc_by_id(id)
+        print(document)
+        # file stats
+        path = document.get_file_path()
+        num_words = document.get_num_words()
+        file_size = document.get_file_size()
+        date_create = document.get_create_date()
+        date_edit = document.get_edit_date()
+        # get file dups
+        duplicate_docs = db.get_duplicates_of(document)
+        # get file tags
+        tags = document.get_tags()
+        tagStr = ""
+        for tag in tags:
+            tagStr += tag + ','
+        print(tagStr)
+        return render(request, self.template_name, {'path': path, 'num_words': num_words, 'file_size': file_size,
+                                                    'date_create': date_create, 'date_edit': date_edit,
+                                                    'dups': duplicate_docs, 'tags': tagStr})
