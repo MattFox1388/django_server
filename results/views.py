@@ -51,6 +51,7 @@ class DetailsView(View):
         tagStr = ""
         for tag in tags:
             tagStr += tag + ','
+        print(tagStr)
         return render(request, self.template_name, {'path': path, 'num_words': num_words, 'file_size': file_size,
                                                     'date_create': date_create, 'date_edit': date_edit,
                                                     'dups': duplicate_docs, 'tags': tagStr})
