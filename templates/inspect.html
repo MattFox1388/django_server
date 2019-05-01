@@ -16,14 +16,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>File: {{ path }}</h1>
-        </hr>
+        <h1>File Details:</h1>
+        <hr>
         <div id="stats">
+
             <h2>File Characteristics</h2>
-            <b>Filed Size: </b>{{ file_size }}
-            <b>Edited: </b>{{ date_edit }}
-            <b>Created: </b>{{ date_create }}
-            <b>Number of words: </b>{{ num_words }}
+            <b>File Path: </b>{{ path }}<br>
+            <b>Filed Size: </b>{{ file_size }}<br>
+            <b>Edited: </b>{{ date_edit }}<br>
+            <b>Created: </b>{{ date_create }}<br>
+            <b>Number of words: </b>{{ num_words }}<br>
         </div>
         <div id="tags">
             <h2>Tags</h2>
