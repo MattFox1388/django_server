@@ -34,9 +34,8 @@ class HomeView(View):
 class DetailsView(View):
     template_name = 'inspect.html'
 
-    def get(self, request):
-        file_id = request.GET['id']
-        document = db.get_doc_by_id(file_id)
+    def get(self, request, id):
+        document = db.get_doc_by_id(id)
         # file stats
         path = document.get_file_path()
         num_words = document.get_num_words()
