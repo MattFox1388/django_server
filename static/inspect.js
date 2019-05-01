@@ -27,7 +27,7 @@ $(function(){
            url: window.location.href,
             data: {'arr': tagArr},
             success:function(data){
-               $(win.document.body).html(data);
+               console.log('changed');
             }
         });
     });
