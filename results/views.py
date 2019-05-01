@@ -48,11 +48,12 @@ class DetailsView(View):
         duplicate_docs = db.get_duplicates_of(document)
         # get file tags
         tags = document.get_tags()
-        js_tags = json.dumps(tags)
-        print('tags: ' + js_tags)
+        tagStr = ""
+        for tag in tags:
+            tagStr += tag + ','
         return render(request, self.template_name, {'path': path, 'num_words': num_words, 'file_size': file_size,
                                                     'date_create': date_create, 'date_edit': date_edit,
-                                                    'dups': duplicate_docs, 'tags': js_tags})
+                                                    'dups': duplicate_docs, 'tags': tagStr})
 
     def post(self, request):
         pass
