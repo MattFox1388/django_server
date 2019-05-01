@@ -265,7 +265,7 @@ class SABackend(StorageBackend):
 
         documents = session.query(SADocument) \
             .filter(SADocument.hash == doc.get_hash()) \
-            .filter(SADocument.path != doc.get_file_path()).filter(SADocument.file_size != doc.get_file_size())
+            .filter(SADocument.path != doc.get_file_path()).filter(SADocument.file_size != doc.get_file_size()).all()
         return documents
 
     def remove(self, doc: Document) -> bool:
