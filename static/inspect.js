@@ -19,7 +19,7 @@ $(function(){
 
 
     $('#submitTag').click(function(){
-        let valStr = $(this).attr('value');
+        let valStr = $('#tagInput').val();
         console.log('valStr: ' + valStr);
         tagArr = valStr.split(',');
         $.ajax({

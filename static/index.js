@@ -18,17 +18,4 @@ $(function(){
             }
         }
     });
-    //is called when a file link is clicked
-   // $('.file_link').click(function(){
-       /* let file_id = $(this).parent().attr('data-id');
-        console.log('data-id: ' + file_id)
-   	var win = window.open();
-        $.ajax({
-           type:'GET',
-           url:'/details/' + file_id,
-            success:function(data){
-               $(win.document.body).html(data);
-            }
-        });
-    });*/
 });
