@@ -1,4 +1,5 @@
 import sys
+import json
 sys.path.append("..")
 from sabackend import SABackend
 from django.shortcuts import render
@@ -47,10 +48,11 @@ class DetailsView(View):
         print('dups: ' + duplicate_docs)
         # get file tags
         tags = document.get_tags()
-        print('tags: ' + tags)
+        js_tags = json.dumps(tags)
+        print('tags: ' + js_tags)
         return render(request, self.template_name, {'path': path, 'num_words': num_words, 'file_size': file_size,
                                                     'date_create': date_create, 'date_edit': date_edit,
-                                                    'dups': duplicate_docs, 'tags': tags})
+                                                    'dups': duplicate_docs, 'tags': js_tags})
 
     def post(self, request):
         pass
