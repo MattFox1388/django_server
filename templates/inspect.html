@@ -13,24 +13,24 @@
 </head>
 <body>
     <div class="container">
-        <h1>File: {{doc.get_file_path}}</h1>
+        <h1>File: {{ path }}</h1>
         </hr>
         <div id="stats">
             <h2>File Characteristics</h2>
-            <b>Filed Size: </b>{{ doc.get_file_size }}
-            <b>Parsed: </b>{{ doc.get_parse_date }}
-            <b>Created: </b>{{ doc.get_create_date }}
-            <b>Modified: </b>{{ doc.get_edit_date }}
+            <b>Filed Size: </b>{{ file_size }}
+            <b>Edited: </b>{{ date_edit }}
+            <b>Created: </b>{{ date_create }}
+            <b>Number of words: </b>{{ num_words }}
         </div>
         <div id="tags">
             <h2>Tags</h2>
-            {% for tag in doc.get_tags %}
+            {% for tag in tags %}
                 <div class="tag">{{ tag }}</div>
             {% endfor %}
         </div>
         <div id="duplicates">
             <h2>Duplicates</h2>
-            {% for doc in duplicates %}
+            {% for doc in dups %}
                 <a>{{ doc.get_file_path }}</a>
             {% endfor %}
         </div>

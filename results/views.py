@@ -44,9 +44,13 @@ class DetailsView(View):
         date_edit = document.get_edit_date()
         # get file dups
         duplicate_docs = db.get_duplicates_of(document)
-        print('dups' + duplicate_docs)
+        print('dups: ' + duplicate_docs)
+        # get file tags
+        tags = document.get_tags()
+        print('tags: ' + tags)
         return render(request, self.template_name, {'path': path, 'num_words': num_words, 'file_size': file_size,
-                                                    'date_create': date_create, 'date_edit': date_edit})
+                                                    'date_create': date_create, 'date_edit': date_edit,
+                                                    'dups': duplicate_docs, 'tags': tags})
 
     def post(self, request):
         pass
