@@ -16,6 +16,8 @@ $(function(){
         }
     });
 
+
+
     $('#submitTag').click(function(){
         let valStr = $(this).attr('value');
         console.log('valStr: ' + valStr);

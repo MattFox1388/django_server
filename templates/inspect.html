@@ -35,7 +35,7 @@
         <div id="duplicates">
             <h2>Duplicates</h2>
             {% for doc in dups %}
-                <b>file path: <b></b><a>{{ doc.get_file_path }}</a><br>
+                <b>file path: <b></b><a href="http://ceas-e384d-dev1.cs.uwm.edu:8000/deatils/{{ doc.file_id }}">{{ doc.get_file_path }}</a><br>
             {% endfor %}
         </div>
     </div>
