@@ -20,5 +20,5 @@ from results.views import HomeView, DetailsView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view()),
-    path('details/<int:id>/', DetailsView, name='details')
+    path('details/<int:id>/', DetailsView.as_view(), name='details')
 ]

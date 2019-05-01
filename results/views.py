@@ -31,20 +31,6 @@ class HomeView(View):
             raise Http404
 
 
-# this function will open file selected on webpage
-def open_file(request):
-    filecontent = ''
-    if request.method == 'GET':
-        file_path = request.GET.get('q')
-        try:
-            with open(file_path, mode='r') as filehandle:
-                filecontent = filehandle.read()
-            return FileResponse(filecontent, content_type='application/pdf')
-        except:
-            print("Unexpected error:", sys.exc_info()[0])
-            raise Http404
-
-
 class DetailsView(View):
     template_name = 'inspect.html'
 
