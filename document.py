@@ -1,6 +1,7 @@
 import os
 import datetime
 from abc import ABC, abstractmethod
+from django.template.defaultfilters import filesizeformat
 
 import utc
 
@@ -91,6 +92,9 @@ class Document(ABC):
         :return: size of this document
         """
         pass
+
+    def get_pretty_file_size(self) -> str:
+        return filesizeformat(self.get_file_size())
 
     @abstractmethod
     def get_num_words(self) -> int:

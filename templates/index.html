@@ -40,7 +40,7 @@
               <tr>
                 <th style="display:none;"></th>
                 <th>Document</th>
-                <th>Size (Kilo Bytes)</th>
+                <th>Size</th>
                 <th>Date Created</th>
                 <th>Date Modified</th>
               </tr>
@@ -50,7 +50,7 @@
                 <tr>
                     <td  style="display:none;"></td>
                     <td data-id="{{ doc.file_id }}"><a href="http://ceas-e384d-dev1.cs.uwm.edu:8000/details/{{ doc.file_id }}" class="file_link">{{ doc.get_file_path }}</a></td>
-                    <td>{{ doc.get_file_size|div:"1000"|to_int }}</td>
+                    <td>{{ doc.get_pretty_file_size }}</td>
                     <td><span>{{doc.get_create_date|dateToISO}}</span>{{ doc.get_create_date }}</td>
                     <td><span>{{doc.get_edit_date|dateToISO}}</span>{{ doc.get_edit_date }}</td>
                 </tr>
