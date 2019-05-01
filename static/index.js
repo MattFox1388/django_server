@@ -19,8 +19,8 @@ $(function(){
         }
     });
     //is called when a file link is clicked
-    $('.file_link').click(function(){
-        let file_id = $(this).parent().attr('data-id');
+   // $('.file_link').click(function(){
+       /* let file_id = $(this).parent().attr('data-id');
         console.log('data-id: ' + file_id)
    	var win = window.open();
         $.ajax({
@@ -30,5 +30,5 @@ $(function(){
                $(win.document.body).html(data);
             }
         });
-    });
+    });*/
 });

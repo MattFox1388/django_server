@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Organizer</title>
+    {% load static %}
+    {% load mathfilters %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
+    <script src="{% static 'index.js' %}"></script>
+</head>
+<body>
+    {% load widget_tweaks %}
+    {% load results_extras %}
+    <div class="container">
+          <!--Search Bar-->
+          <form class="search form-horizontal" action="" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+            <div class="form-group col-xs-6">
+                {{ form.search_phrase|attr:"placeholder:Search.."|attr:"name:search"|attr:"id:searchInput" }}
+              <!-- <input type="text" placeholder="Search.." name="search" id = "searchInput"> -->
+            </div>
+            <div class="form-group col-xs-6">
+              <button class = "btn btn-default" type="submit" id="searchBtn">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </div>
+            <br><br><br>
+            <div class="container">
+                {{ form.files|attr:"id:typeOptions" }}
+            </div>
+          </form>
+    </div>
+    <!--Table of Files-->
+    <div id="tableDiv">
+        <table class="table" id="sortedTb">
+            <thead>
+              <tr>
+                <th>Relevance</th>
+                <th>Document</th>
+                <th>Size (Kilo Bytes)</th>
+                <th>Date Created</th>
+                <th>Date Modified</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for doc in resultFiles%}
+                <tr>
+                    <td></td>
+                    <td><a class="file_link">{{ doc.get_file_path }}</a></td>
+                    <td>{{ doc.get_file_size|div:"1000"|to_int }}</td>
+                    <td><span>{{doc.get_parse_date|dateToISO}}</span>{{ doc.get_parse_date }}</td>
+                    <td><span>{{doc.get_create_date|dateToISO}}</span>{{ doc.get_create_date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+</body>
+</html>
