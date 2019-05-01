@@ -24,7 +24,8 @@ class HomeView(View):
         form = SearchForm(request.POST)
         if form.is_valid():
             search_phrase = escape(form.cleaned_data['search_phrase'])
-            print("search phrase: " + search_phrase)
+            # set initial search phrase for form to what was searched
+            form.fields['search_phrase'].initial = search_phrase
             documents = db.get(search_phrase)
             return render(request, self.template_name, {'form': self.search_form, 'resultFiles': documents})
         else:
