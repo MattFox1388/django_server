@@ -24,8 +24,8 @@
             <h2>File Characteristics</h2>
             <b>File Path: </b>{{ path }}<br>
             <b>Filed Size: </b>{{ file_size }}<br>
-            <b>Edited: </b>{{ date_edit }}<br>
-            <b>Created: </b>{{ date_create }}<br>
+            <b>Created: </b>{{ date_edit }}<br>
+            <b>Edited: </b>{{ date_create }}<br>
             <b>Number of words: </b>{{ num_words }}<br>
         </div>
         <div id="tags">
@@ -35,9 +35,26 @@
         </div>
         <div id="duplicates">
             <h2>Duplicates</h2>
-            {% for doc in dups %}
-                <a href="http://ceas-e384d-dev1.cs.uwm.edu:8000/details/{{ doc.file_id }}">{{ doc.get_file_path }}</a><br>
-            {% endfor %}
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>File Path</th>
+                    <th>File Size (bytes)</th>
+                    <th>Create Date</th>
+                    <th>Modified Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for doc in dups %}
+                        <tr>
+                            <td><a href="{% url 'details-view' doc.file_id %}">{{ doc.get_file_path }}</a></td>
+                            <td>{{doc.get_file_size}}</td>
+                            <td>{{doc.get_edit_date}}</td>
+                            <td>{{doc.get_create_date}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
