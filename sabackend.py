@@ -337,8 +337,9 @@ class SABackend(StorageBackend):
             session.commit()
             doc.tags.add(tag)
             return True
-        except:
+        except Exception as e:
             session.rollback()
+            raise e
         return False
 
     def remove_tag(self, document, tag):
