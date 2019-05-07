@@ -63,6 +63,7 @@ class DetailsView(View):
         curTags = db.get_tags(document)
         tagInput = request.POST["tagInput"]
         print("Here 1")
+        #te
         print(tagInput)
         tagInput = tagInput.split(',')
         for tag in tagInput:
