@@ -309,8 +309,8 @@ class SABackend(StorageBackend):
             return False  # Invalid parameter received
         if type(document) == SADocument:
             document = document.file_id
-        document_rec = session.query(SADocument).filter(SADocument.file_id == document).all()
-        if len(document_rec) != 1:
+        document_rec = session.query(SADocument).filter(SADocument.file_id == document).one()
+        if not document_rec:
             return False  # No such document exists
 
         # Check if keyword already exists in database.  If it doesn't, add it.
@@ -326,8 +326,8 @@ class SABackend(StorageBackend):
         keyword_instance = session.query(SAKeywordInstance)\
             .filter(SAKeywordInstance.tag.is_(True))\
             .filter(SAKeywordInstance.file_id == document)\
-            .filter(SAKeywordInstance.keyword_id == kw.keyword_id).all()
-        if len(keyword_instance):
+            .filter(SAKeywordInstance.keyword_id == kw.keyword_id).one()
+        if keyword_instance:
             return True  # Tag already exists
 
         # Add keyword instance record.
