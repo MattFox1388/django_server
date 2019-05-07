@@ -335,7 +335,7 @@ class SABackend(StorageBackend):
         session.add(keyword_instance)
         try:
             session.commit()
-            doc.tags.add(tag)
+            document_rec.tags.add(tag)
             return True
         except Exception as e:
             session.rollback()
