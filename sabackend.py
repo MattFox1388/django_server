@@ -63,7 +63,7 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
 
     keyword_map = {}
     safe_keyword_map = None
-    tags = {}
+    tags = set()
 
     def __init__(self, *args, **kwargs):
         base.__init__(self, *args, **kwargs)
