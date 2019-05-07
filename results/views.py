@@ -59,12 +59,15 @@ class DetailsView(View):
 
     def post(self, request, id):
         # add tag
-        tagArr = request.POST['arr']
-        for tag in tagArr:
+        tagInput = request.POST["tagInput"]
+        print("Here 1")
+        print(tagInput)
+        tagInput = tagInput.split(',')
+        for tag in tagInput:
             db.add_tag(id, tag)
+            print("Tag added to document: " + tag)
         # reload page
         document = db.get_doc_by_id(id)
-        print(document)
         # file stats
         path = document.get_file_path()
         num_words = document.get_num_words()
@@ -74,7 +77,9 @@ class DetailsView(View):
         # get file dups
         duplicate_docs = db.get_duplicates_of(document)
         # get file tags
-        tags = document.get_tags()
+        tags = db.get_tags(document)
+        print("Tags: ")
+        print(tags)
         tagStr = ""
         for tag in tags:
             tagStr += tag + ','

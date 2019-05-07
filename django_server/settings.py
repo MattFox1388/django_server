@@ -25,7 +25,7 @@ SECRET_KEY = '^0=hi15x3ouki-qzc&(_p46(kg4is)#@xfzg@epe5us+rch-y3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ceas-e384d-dev1.cs.uwm.edu']
+ALLOWED_HOSTS = ['ceas-e384d-dev1.cs.uwm.edu','127.0.0.1']
 
 
 # Application definition

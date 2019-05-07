@@ -30,8 +30,11 @@
         </div>
         <div id="tags">
             <h2>Tags</h2>
-            <input type="text" id="tagInput" value="{{ tags }}" data-role="tagsinput"/>
-            <!--<button id="submitTag">Save Tags</button>-->
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="tagInput" id="tagInput" value="{{ tags }}" data-role="tagsinput"/>
+                <button id="submitTag">Save Tags</button>
+            </form>
         </div>
         <div id="duplicates">
             <h2>Duplicates</h2>
