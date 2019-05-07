@@ -324,11 +324,11 @@ class SABackend(StorageBackend):
 
         # Check if tag already exists in database.
         keyword_instance = session.query(SAKeywordInstance)\
-            .filter(SAKeywordInstance.tag is True)\
+            .filter(SAKeywordInstance.tag.is_(True))\
             .filter(SAKeywordInstance.file_id == document)\
             .filter(SAKeywordInstance.keyword_id == kw.keyword_id).all()
         if len(keyword_instance):
-            return False  # Tag already exists
+            return True  # Tag already exists
 
         # Add keyword instance record.
         keyword_instance = SAKeywordInstance(file_id=document, keyword_id=kw.keyword_id, tag=True, count=1)
