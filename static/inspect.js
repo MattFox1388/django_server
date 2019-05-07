@@ -32,12 +32,4 @@ $(function(){
         });
     });
 
-    $('#tagInput').on('itemRemoved', function(event) {
-        // event.item: contains the item
-        alert(event.item);
-    });
-    $('#tagInput').on('itemAdded', function(event) {
-        // event.item: contains the item
-        alert(event.item);
-    });
 });
