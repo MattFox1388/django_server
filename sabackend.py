@@ -63,7 +63,7 @@ class SADocument(Document, base, metaclass=ABCBaseMeta):
 
     keyword_map = {}
     safe_keyword_map = None
-    tags = {}
+    tags = set()
 
     def __init__(self, *args, **kwargs):
         base.__init__(self, *args, **kwargs)
@@ -309,8 +309,8 @@ class SABackend(StorageBackend):
             return False  # Invalid parameter received
         if type(document) == SADocument:
             document = document.file_id
-        document_rec = session.query(SADocument).filter(SADocument.file_id == document).all()
-        if len(document_rec) != 1:
+        document_rec = session.query(SADocument).filter(SADocument.file_id == document).first()
+        if not document_rec:
             return False  # No such document exists
 
         # Check if keyword already exists in database.  If it doesn't, add it.
@@ -324,21 +324,22 @@ class SABackend(StorageBackend):
 
         # Check if tag already exists in database.
         keyword_instance = session.query(SAKeywordInstance)\
-            .filter(SAKeywordInstance.tag is True)\
+            .filter(SAKeywordInstance.tag.is_(True))\
             .filter(SAKeywordInstance.file_id == document)\
-            .filter(SAKeywordInstance.keyword_id == kw.keyword_id).all()
-        if len(keyword_instance):
-            return False  # Tag already exists
+            .filter(SAKeywordInstance.keyword_id == kw.keyword_id).first()
+        if keyword_instance:
+            return True  # Tag already exists
 
         # Add keyword instance record.
         keyword_instance = SAKeywordInstance(file_id=document, keyword_id=kw.keyword_id, tag=True, count=1)
-        session.add(keyword_instance)
+        session.merge(keyword_instance)
         try:
             session.commit()
-            doc.tags.add(tag)
+            document_rec.tags.add(tag)
             return True
-        except:
+        except Exception as e:
             session.rollback()
+            raise e
         return False
 
     def remove_tag(self, document, tag):

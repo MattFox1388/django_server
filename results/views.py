@@ -59,13 +59,20 @@ class DetailsView(View):
 
     def post(self, request, id):
         # add tag
+        document = db.get_doc_by_id(id)
+        curTags = db.get_tags(document)
         tagInput = request.POST["tagInput"]
         print("Here 1")
         print(tagInput)
         tagInput = tagInput.split(',')
         for tag in tagInput:
-            db.add_tag(id, tag)
-            print("Tag added to document: " + tag)
+            if tag not in curTags:
+                db.add_tag(id, tag)
+                print("Tag added to document: " + tag)
+        for tag in curTags:
+            if tag not in tagInput:
+                db.remove_tag(document, tag)
+                print("Tag removed from document: " + tag)
         # reload page
         document = db.get_doc_by_id(id)
         # file stats

@@ -21,11 +21,11 @@ $(function(){
     $('#submitTag').click(function(){
         let valStr = $('#tagInput').val();
         console.log('valStr: ' + valStr);
-        tagArr = valStr.split(',');
+        tagInput = valStr.split(',');
         $.ajax({
            type:'POST',
            url: window.location.href,
-            data: {'arr': tagArr},
+            data: {'tagInput': tagInput},
             success:function(data){
                console.log('changed');
             }
