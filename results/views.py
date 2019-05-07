@@ -64,7 +64,10 @@ class DetailsView(View):
         print(tagInput)
         tagInput = tagInput.split(',')
         for tag in tagInput:
-            db.add_tag(id, tag)
+            if db.add_tag(id, tag):
+                print('added ' + tag)
+            else:
+                print('failed to add ' + tag)
             print("Tag added to document: " + tag)
         # reload page
         document = db.get_doc_by_id(id)
