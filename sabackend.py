@@ -332,7 +332,7 @@ class SABackend(StorageBackend):
 
         # Add keyword instance record.
         keyword_instance = SAKeywordInstance(file_id=document, keyword_id=kw.keyword_id, tag=True, count=1)
-        session.add(keyword_instance)
+        session.merge(keyword_instance)
         try:
             session.commit()
             document_rec.tags.add(tag)
