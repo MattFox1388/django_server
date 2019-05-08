@@ -32,6 +32,7 @@ class HomeView(View):
             if search_by == 'Search By Keyword':
                 documents = db.get(search_phrase)
             else:
+                print('got here!')
                 documents = db.get_documents_by_tag(search_phrase)
             return render(request, self.template_name, {'form': form, 'resultFiles': documents})
         else:
