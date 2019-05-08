@@ -27,7 +27,12 @@ class HomeView(View):
             # set initial search phrase for form to what was searched
             form.fields['search_phrase'].initial = search_phrase
             print('Search Op: ' + form.cleaned_data['search_by'])
-            documents = db.get(search_phrase)
+            search_by = form.cleaned_data['search_by']
+            documents = None
+            if search_by == 'Search By Keyword':
+                documents = db.get(search_phrase)
+            else:
+                documents = db.get_documents_by_tag(search_phrase)
             return render(request, self.template_name, {'form': form, 'resultFiles': documents})
         else:
             print(form.errors)
