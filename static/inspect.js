@@ -18,7 +18,7 @@ $(function(){
 
 
 
-    $('#submitTag').click(function(){
+    /*$('#submitTag').click(function(){
         let valStr = $('#tagInput').val();
         console.log('valStr: ' + valStr);
         tagInput = valStr.split(',');
@@ -27,10 +27,10 @@ $(function(){
            url: window.location.href,
             data: {'tagInput': tagInput},
             success:function(data){
-               console.log('changed');
+               console.log(data);
             }
         });
-    });
+    });*/
 
     $('#tagInput').on('itemRemoved', function(event) {
         // event.item: contains the item
@@ -38,6 +38,13 @@ $(function(){
     });
     $('#tagInput').on('itemAdded', function(event) {
         // event.item: contains the item
-        alert(event.item);
+         $.ajax({
+           type:'POST',
+           url: window.location.href,
+            data: {'arr': event.item},
+            success:function(data){
+               console.log(data);
+            }
+        });
     });
 });
